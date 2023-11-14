@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FoodShare</string>
+    <string-array name="ciudades">
+        <item>Concepción</item>
+        <item>Chillán</item>
+        <item>Los Angeles</item>
+    </string-array>
+</resources>
