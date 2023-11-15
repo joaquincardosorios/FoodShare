@@ -2,6 +2,7 @@ package com.example.foodshare;
 
 import com.example.foodshare.classes.Offer;
 import com.example.foodshare.classes.Product;
+import com.example.foodshare.classes.Request;
 import com.example.foodshare.classes.User;
 
 import java.time.LocalDate;
@@ -38,6 +39,16 @@ public class Data {
                         }
                 )
         );
+        offerList.add(new Offer(
+                        1,
+                        "Dono huevos de campos a quien los necesite",
+                        formatearFecha("15-11-2023"),
+                        -36.83535413311839, -73.05913157690149,
+                        new Product[]{
+                                new Product("Huevos", "1 docena", formatearFecha("22-11-2023"))
+                        }
+                )
+        );
 
 
         return offerList;
@@ -56,4 +67,14 @@ public class Data {
         User user = new User(1,"Joaquin Rios","joaquin.rios@virginiogomez.cl", "111111");
         return user;
     }
+
+    public static List<Request> getRequestList(){
+        List<Request> requests = new ArrayList<>();
+        List<Product> product1 = new ArrayList<>();
+        product1.add(new Product("Huevos", "1 docena", formatearFecha("22-11-2023")));
+        requests.add( new Request(3,2,product1));
+        requests.add( new Request(3,3,product1));
+        return requests;
+    }
+
 }

@@ -1,0 +1,69 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:paddingVertical="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textYourSolicitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ofertante" />
+
+        <TextView
+            android:id="@+id/textYourFechaSolicitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Solicitud" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Productos:" />
+
+        <LinearLayout
+            android:id="@+id/linearYourProductos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnNegateRequest"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:contentDescription="negar"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_negate" />
+
+        <ImageButton
+            android:id="@+id/btnConfirmRequest"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:contentDescription="confirmar"
+            android:scaleType="centerCrop"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+</LinearLayout>

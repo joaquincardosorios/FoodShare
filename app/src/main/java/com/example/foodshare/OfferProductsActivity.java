@@ -1,5 +1,6 @@
 package com.example.foodshare;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -20,11 +21,13 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.foodshare.classes.DatePickerFragment;
 import com.example.foodshare.classes.Helper;
 import com.example.foodshare.classes.Offer;
 import com.example.foodshare.classes.Product;
+import com.example.foodshare.classes.Request;
 import com.example.foodshare.classes.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,7 +46,6 @@ import java.util.Optional;
 
 public class OfferProductsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
-        GoogleMap.OnMapClickListener,
         GoogleMap.OnMapLongClickListener
 {
 
@@ -74,15 +76,18 @@ public class OfferProductsActivity extends AppCompatActivity implements
         scrollProductos = findViewById(R.id.scroll_productos);
 
         helper = new Helper();
-        Intent i = getIntent();
-        ofertas =(List<Offer>) i.getSerializableExtra("ofertas");
+
+        ofertas = (helper.getList(this, "ofertas", Offer.class) != null) ?
+                helper.getList(this, "ofertas", Offer.class) :
+                Data.getOffersList();
+
+        user = (helper.getCurrentUser(this) != null) ?
+                helper.getCurrentUser(this) :
+                Data.getUser();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapOffer);
         mapFragment.getMapAsync(this);
 
-        offer = new Offer();
-        offer.setUserId(user.getId());
-        offer.setCreationDate(LocalDate.now());
 
         productos = new ArrayList<>();
 
@@ -96,19 +101,31 @@ public class OfferProductsActivity extends AppCompatActivity implements
         btnOffer.setOnClickListener(view -> {
             addOffer();
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(OfferProductsActivity.this, "Hola", Toast.LENGTH_SHORT).show();
+                // TODO implementar
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void addOffer() {
         if(validateOffer()){
             Product[] productArray  = new Product[productos.size()];
             productos.toArray(productArray);
+            Offer offer = new Offer();
+            offer.setUserId(user.getId());
+            offer.setCreationDate(LocalDate.now());
             offer.setProducts(productArray);
             offer.setLat(lat);
             offer.setLong(along);
             offer.setDescription(etDescription.getText().toString());
             ofertas.add(offer);
+            helper.saveList(this, ofertas, "ofertas");
             Intent i = new Intent(OfferProductsActivity.this, MainActivity.class);
-            i.putExtra("ofertas", (Serializable) ofertas);
             startActivity(i);
         }
     }
@@ -248,11 +265,6 @@ public class OfferProductsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onMapClick(@NonNull LatLng latLng) {
-
-    }
-
-    @Override
     public void onMapLongClick(@NonNull LatLng latLng) {
         lat = latLng.latitude;
         along = latLng.longitude;
@@ -269,7 +281,6 @@ public class OfferProductsActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        this.mMap.setOnMapClickListener(this);
         this.mMap.setOnMapLongClickListener(this);
         LatLng Chile = new LatLng(-36.8331312135371, -73.0564574815846);
 

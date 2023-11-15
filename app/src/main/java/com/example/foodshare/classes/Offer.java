@@ -25,6 +25,7 @@ public class Offer implements Serializable {
     public boolean Closed;
 
     public Offer() {
+        Id = ++lastId;
         this.Closed = false;
     }
 

@@ -1,0 +1,52 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:paddingVertical="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textSolicitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ofertante" />
+
+        <TextView
+            android:id="@+id/textFechaSolicitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Solicitud" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Productos:" />
+
+        <LinearLayout
+            android:id="@+id/linearProductos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnDeleteOffer"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:padding="1dp"
+        android:text="X" />
+</LinearLayout>

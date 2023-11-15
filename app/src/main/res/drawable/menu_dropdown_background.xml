@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo del menú -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" /> <!-- Color de fondo del menú -->
+        </shape>
+    </item>
+
+    <!-- Bordes del menú -->
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#CCCCCC" /> <!-- Color de los bordes del menú -->
+        </shape>
+    </item>
+
+</layer-list>

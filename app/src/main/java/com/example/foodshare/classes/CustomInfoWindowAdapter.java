@@ -3,6 +3,7 @@ package com.example.foodshare.classes;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,11 +20,15 @@ import java.time.format.DateTimeFormatter;
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final View windowView;
     Helper helper;
+    private final int infoWindowWidth;
+    private final int infoWindowHeight;
     private final LayoutInflater inflater;
     public CustomInfoWindowAdapter(Context context){
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         windowView = inflater.inflate(R.layout.custom_info_window, null);
         helper = new Helper();
+        infoWindowWidth = context.getResources().getDimensionPixelSize(R.dimen.info_window_width);
+        infoWindowHeight = context.getResources().getDimensionPixelSize(R.dimen.info_window_height);
     }
 
     @Nullable
@@ -43,8 +48,8 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             int numRows = productsTableLayout.getChildCount();
             int startIndex = 1;
 
-            for (int i = startIndex; i < numRows; i++) {
-                productsTableLayout.removeViewAt(startIndex);
+            for (int i = numRows - 1; i >= startIndex; i--) {
+                productsTableLayout.removeViewAt(i);
             }
 
             for (Product producto : oferta.getProducts()) {
@@ -52,11 +57,12 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 row.addView(helper.crearTextView(windowView.getContext(),producto.getName(), 12,1,8));
                 row.addView(helper.crearTextView(windowView.getContext(),producto.getQuantity(), 12,1,8));
 
-                String date = producto.getExpirationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String date = producto.getExpirationDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 row.addView(helper.crearTextView(windowView.getContext(),date, 12,1,8));
 
                 productsTableLayout.addView(row);
             }
+            windowView.setLayoutParams(new ViewGroup.LayoutParams(infoWindowWidth, infoWindowHeight));
         }
 
         return windowView;

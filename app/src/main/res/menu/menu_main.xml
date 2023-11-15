@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_principal"
+        android:title="Principal" />
+    <item
+        android:id="@+id/action_offers"
+        android:title="Mis Ofertas" />
+    <item
+        android:id="@+id/action_requests"
+        android:title="Mis Solicitudes" />
+    <item
+        android:id="@+id/action_your_requests"
+        android:title="Solcitudes para mi" />
+    <item
+        android:id="@+id/action_change_user"
+        android:title="Cambiar Usuario" />
+</menu>
