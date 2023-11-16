@@ -5,6 +5,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ public class YourRequestsActivity extends AppCompatActivity {
     ListView lvMyRequests;
     Helper helper;
     User user;
+    List<Request> requestList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class YourRequestsActivity extends AppCompatActivity {
         helper = new Helper();
         user = helper.getCurrentUser(this);
         List<Offer> offerList = helper.getList(this, "ofertas", Offer.class);
-        List<Request> requestList = helper.getList(this, "solicitudes", Request.class);
+        requestList = helper.getList(this, "solicitudes", Request.class);
         List<Request> filteredRequests = new ArrayList<>();
         if( requestList != null && offerList != null){
             for (Request request : requestList){
@@ -59,6 +62,50 @@ public class YourRequestsActivity extends AppCompatActivity {
         YourRequestAdapter adapter = new YourRequestAdapter(this, filteredRequests);
         lvMyRequests = findViewById(R.id.lv_your_requests);
         lvMyRequests.setAdapter(adapter);
+
+        adapter.setOnNegateButtonClickListener(new YourRequestAdapter.OnNegateButtonClickListener() {
+            @Override
+            public void onNegateButtonClick(int position) {
+                int idRequestToDelete = filteredRequests.get(position).getId();
+                List<Request> listaFiltrada = new ArrayList<>();
+                for (Request request : requestList) {
+                    if (request.getId() != idRequestToDelete) {
+                        listaFiltrada.add(request);
+                    }
+                }
+                helper.saveList(YourRequestsActivity.this, listaFiltrada, "solicitudes");
+                startActivity(new Intent(YourRequestsActivity.this, YourRequestsActivity.class));
+
+            }
+        });
+
+        adapter.setOnConfirmButtonClickListener(new YourRequestAdapter.OnConfirmButtonClickListener() {
+            @Override
+            public void onConfirmButtonClick(int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(YourRequestsActivity.this);
+                builder.setTitle("Solicitud Aceptada");
+                builder.setMessage("Se habilitará un sistema interno de chat para que puedas comunicarte con la otra parte de manera segura.");
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        int idRequestToDelete = filteredRequests.get(position).getId();
+                        List<Request> listaFiltrada = new ArrayList<>();
+                        for (Request request : requestList) {
+                            if (request.getId() != idRequestToDelete) {
+                                listaFiltrada.add(request);
+                            }
+                        }
+                        helper.saveList(YourRequestsActivity.this, listaFiltrada, "solicitudes");
+                        startActivity(new Intent(YourRequestsActivity.this, YourRequestsActivity.class));
+                    }
+                });
+
+                builder.show();
+            }
+        });
     }
 
     @Override

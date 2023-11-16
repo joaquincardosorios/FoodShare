@@ -19,6 +19,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class YourRequestAdapter extends ArrayAdapter<Request> {
+
+    private YourRequestAdapter.OnNegateButtonClickListener onNegateButtonClickListener;
+    public void setOnNegateButtonClickListener(YourRequestAdapter.OnNegateButtonClickListener listener) {
+        this.onNegateButtonClickListener = listener;
+    }
+    private YourRequestAdapter.OnConfirmButtonClickListener onConfirmButtonClickListener;
+    public void setOnConfirmButtonClickListener(YourRequestAdapter.OnConfirmButtonClickListener listener) {
+        this.onConfirmButtonClickListener = listener;
+    }
     public YourRequestAdapter(Context context, List<Request> requests) {
         super(context, 0, requests);
     }
@@ -58,7 +67,15 @@ public class YourRequestAdapter extends ArrayAdapter<Request> {
 
 
             btnNegate.setOnClickListener(v -> {
+                if (onNegateButtonClickListener != null) {
+                    onNegateButtonClickListener.onNegateButtonClick(position);
+                }
+            });
 
+            btnConfirm.setOnClickListener(v -> {
+                if (onConfirmButtonClickListener != null) {
+                    onConfirmButtonClickListener.onConfirmButtonClick(position);
+                }
             });
         }
 
@@ -81,5 +98,13 @@ public class YourRequestAdapter extends ArrayAdapter<Request> {
             }
         }
         return null;
+    }
+
+    public interface OnNegateButtonClickListener {
+        void onNegateButtonClick(int position);
+    }
+
+    public interface OnConfirmButtonClickListener {
+        void onConfirmButtonClick(int position);
     }
 }

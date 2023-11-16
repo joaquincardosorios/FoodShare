@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.foodshare.R;
 import com.example.foodshare.classes.Helper;
+import com.example.foodshare.classes.Offer;
 import com.example.foodshare.classes.Request;
 import com.example.foodshare.classes.RequestAdapter;
 import com.example.foodshare.classes.User;
@@ -27,6 +28,7 @@ public class MyRequestsActivity extends AppCompatActivity {
     ListView lvMyRequests;
     Helper helper;
     User user;
+    List<Request> requestList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class MyRequestsActivity extends AppCompatActivity {
 
         helper = new Helper();
         user = helper.getCurrentUser(this);
-        List<Request> requestList = helper.getList(this, "solicitudes", Request.class);
+        requestList = helper.getList(this, "solicitudes", Request.class);
         List<Request> filteredRequests = (requestList != null)
                 ? requestList.stream().filter(request -> request.getUserId() == user.getId()).collect(Collectors.toList())
                 : new ArrayList<>();
@@ -50,6 +52,21 @@ public class MyRequestsActivity extends AppCompatActivity {
         RequestAdapter adapter = new RequestAdapter(this, filteredRequests);
         lvMyRequests = findViewById(R.id.lv_my_requests);
         lvMyRequests.setAdapter(adapter);
+
+        adapter.setOnDeleteButtonClickListener(new RequestAdapter.OnDeleteButtonClickListener() {
+            @Override
+            public void onDeleteButtonClick(int position) {
+                int idRequestToDelete = filteredRequests.get(position).getId();
+                List<Request> listaFiltrada = new ArrayList<>();
+                for (Request request : requestList) {
+                    if (request.getId() != idRequestToDelete) {
+                        listaFiltrada.add(request);
+                    }
+                }
+                helper.saveList(MyRequestsActivity.this, listaFiltrada, "solicitudes");
+                startActivity(new Intent(MyRequestsActivity.this, MyRequestsActivity.class));
+            }
+        });
 
 
     }

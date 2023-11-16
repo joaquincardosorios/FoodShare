@@ -27,6 +27,7 @@ public class MyOffersActivity extends AppCompatActivity {
     ListView lvMyOffers;
     Helper helper;
     User user;
+    List<Offer> offerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
         helper = new Helper();
         user = helper.getCurrentUser(this);
-        List<Offer> offerList = helper.getList(this, "ofertas", Offer.class);
+        offerList = helper.getList(this, "ofertas", Offer.class);
         List<Offer> filteredOffers = (offerList != null)
                 ? offerList.stream().filter(offer -> offer.getUserId() == user.getId()).collect(Collectors.toList())
                 : new ArrayList<>();
@@ -51,6 +52,28 @@ public class MyOffersActivity extends AppCompatActivity {
         OfferAdapter adapter = new OfferAdapter(this, filteredOffers);
         lvMyOffers = findViewById(R.id.lv_my_offers);
         lvMyOffers.setAdapter(adapter);
+        adapter.setOnDeleteButtonClickListener(new OfferAdapter.OnDeleteButtonClickListener() {
+            @Override
+            public void onDeleteButtonClick(int position) {
+                int idOfferToDelete = filteredOffers.get(position).getId();
+                List<Offer> listaFiltrada = new ArrayList<>();
+                for (Offer offer : offerList) {
+                    if (offer.getId() != idOfferToDelete) {
+                        listaFiltrada.add(offer);
+                    }
+                }
+                List<Request> requestList = helper.getList(MyOffersActivity.this,"solicitudes", Request.class);
+                List<Request> listaFiltradaReq = new ArrayList<>();
+                for (Request request : requestList) {
+                    if (request.getOfferId() != idOfferToDelete) {
+                        listaFiltradaReq.add(request);
+                    }
+                }
+                helper.saveList(MyOffersActivity.this, listaFiltrada, "ofertas");
+                helper.saveList(MyOffersActivity.this, listaFiltradaReq, "solicitudes");
+                startActivity(new Intent(MyOffersActivity.this, MyOffersActivity.class));
+            }
+        });
 
     }
 

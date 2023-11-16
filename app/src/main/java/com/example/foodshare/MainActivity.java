@@ -150,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.action_your_requests) {
             startActivity(new Intent(this, YourRequestsActivity.class));
             return true;
+        }else if (id == R.id.action_change_user) {
+            startActivity(new Intent(this, ChangeUserActivity.class));
+            return true;
         }else {
             return super.onOptionsItemSelected(item);
         }

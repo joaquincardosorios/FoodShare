@@ -17,6 +17,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RequestAdapter extends ArrayAdapter<Request> {
+    private RequestAdapter.OnDeleteButtonClickListener onDeleteButtonClickListener;
+    public void setOnDeleteButtonClickListener(RequestAdapter.OnDeleteButtonClickListener listener) {
+        this.onDeleteButtonClickListener = listener;
+    }
     public RequestAdapter(Context context, List<Request> requests) {
         super(context, 0, requests);
     }
@@ -53,7 +57,9 @@ public class RequestAdapter extends ArrayAdapter<Request> {
             }
 
             btnDelete.setOnClickListener(v -> {
-
+                if (onDeleteButtonClickListener != null) {
+                    onDeleteButtonClickListener.onDeleteButtonClick(position);
+                }
             });
         }
 
@@ -76,5 +82,9 @@ public class RequestAdapter extends ArrayAdapter<Request> {
             }
         }
         return null;
+    }
+
+    public interface OnDeleteButtonClickListener {
+        void onDeleteButtonClick(int position);
     }
 }

@@ -21,6 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class OfferAdapter extends ArrayAdapter<Offer> {
+    private OnDeleteButtonClickListener onDeleteButtonClickListener;
+    public void setOnDeleteButtonClickListener(OnDeleteButtonClickListener listener) {
+        this.onDeleteButtonClickListener = listener;
+    }
+
     public OfferAdapter(Context context, List<Offer> offers) {
         super(context, 0, offers);
     }
@@ -51,12 +56,18 @@ public class OfferAdapter extends ArrayAdapter<Offer> {
                 textProductInfo.setText(product.getName() + " : " + product.getQuantity());
                 linearProductos.addView(textProductInfo);
             }
-
             btnDelete.setOnClickListener(v -> {
-
+                if (onDeleteButtonClickListener != null) {
+                    onDeleteButtonClickListener.onDeleteButtonClick(position);
+                }
             });
         }
 
+
         return convertView;
+    }
+
+    public interface OnDeleteButtonClickListener {
+        void onDeleteButtonClick(int position);
     }
 }
